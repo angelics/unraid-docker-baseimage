@@ -14,7 +14,10 @@ ARG TERM=xterm
 WORKDIR /tmp
 
 # Copy helpers.
-COPY helpers/* /usr/local/bin/
+COPY helpers/* /tmp/helpers/
+RUN \
+	chmod -R +x /tmp/helpers/ && \
+	cp -R /tmp/helpers/* /usr/local/bin/
 
 # Install s6 overlay.
 RUN \
@@ -60,7 +63,10 @@ RUN \
     cp /etc/shadow /defaults/
 
 # Add files.
-COPY rootfs/ /
+COPY rootfs/ /tmp/rootfs/
+RUN \
+	chmod -R +x /tmp/rootfs && \
+	cp -R /tmp/rootfs/* /
 
 # Set environment variables.
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=3 \
